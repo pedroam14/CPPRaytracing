@@ -31,16 +31,16 @@ struct Vector3
     inline Vector3 &operator*=(const float t);
     inline Vector3 &operator/=(const float t);
 
-    inline float length() const
+    inline float Length() const
     {
         return sqrt(e[0] * e[0] + e[1] * e[1] + e[2] * e[2]);
     }
-    inline float squared_length() const
+    inline float SquaredLength() const
     {
         return e[0] * e[0] + e[1] * e[1] + e[2] * e[2];
     }
 
-    inline void make_unit_vector();
+    inline void MakeUnitVector();
 };
 
 inline std::istream &operator>>(std::istream &is, Vector3 &t)
@@ -55,7 +55,7 @@ inline std::ostream &operator<<(std::ostream &os, const Vector3 &t)
     return os;
 }
 
-inline void Vector3::make_unit_vector()
+inline void Vector3::MakeUnitVector()
 {
     float k = 1.0 / sqrt(e[0] * e[0] + e[1] * e[1] + e[2] * e[2]);
     e[0] *= k;
@@ -160,7 +160,7 @@ inline Vector3 &Vector3::operator/=(const float t)
     return *this;
 }
 
-inline Vector3 unit_vector(Vector3 v)
+inline Vector3 UnitVector(Vector3 v)
 {
-    return v / v.length();
+    return v / v.Length();
 }
