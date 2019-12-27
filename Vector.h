@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <iostream>
 
-typedef struct Vector3
+struct Vector3
 {
     float e[3];
     Vector3() {}
@@ -41,8 +41,7 @@ typedef struct Vector3
     }
 
     inline void make_unit_vector();
-
-} Vector3;
+};
 
 inline std::istream &operator>>(std::istream &is, Vector3 &t)
 {
@@ -74,6 +73,10 @@ inline Vector3 operator*(const Vector3 &v1, const Vector3 &v2)
     return Vector3(v1.e[0] * v2.e[0], v1.e[1] * v2.e[1], v1.e[2] * v1.e[2]);
 }
 inline Vector3 operator*(const Vector3 &v, float t)
+{
+    return Vector3(t * v.e[0], t * v.e[1], t * v.e[2]);
+}
+inline Vector3 operator*(float t, const Vector3 &v)
 {
     return Vector3(t * v.e[0], t * v.e[1], t * v.e[2]);
 }
