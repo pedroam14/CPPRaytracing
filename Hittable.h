@@ -3,11 +3,14 @@
 
 #include "Ray.h"
 
+struct Material;
+
 struct HitRecord
 {
     float t;
     Vector3 p;
     Vector3 normal;
+    Material *mat_ptr;
 };
 
 struct Hittable
