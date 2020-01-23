@@ -36,7 +36,9 @@ bool refract(const Vector3 &v, const Vector3 &n, float ni_over_nt, Vector3 &refr
         return true;
     }
     else
+    {
         return false;
+    }
 }
 
 Vector3 reflect(const Vector3 &v, const Vector3 &n)
@@ -49,7 +51,7 @@ struct Material
     virtual bool scatter(const Ray &r_in, const HitRecord &rec, Vector3 &attenuation, Ray &scattered) const = 0;
 };
 
-struct Lambertian : public Material
+struct Lambertian : Material
 {
     Lambertian(const Vector3 &a) : albedo(a) {}
     virtual bool scatter(const Ray &r_in, const HitRecord &rec, Vector3 &attenuation, Ray &scattered) const
@@ -63,23 +65,27 @@ struct Lambertian : public Material
     Vector3 albedo;
 };
 
-struct Metal : public Material
+struct Metal : Material
 {
-    Metal(const Vector3 &a) : albedo(a) {}
+    Metal(const Vector3 &a, float f) : albedo(a)
+    {
+        f < 1 ? fuzz = f : fuzz = 1;
+    }
     virtual bool scatter(const Ray &r_in, const HitRecord &rec,
                          Vector3 &attenuation, Ray &scattered) const
     {
         Vector3 reflected = reflect(UnitVector(r_in.direction()), rec.normal);
-        scattered = Ray(rec.p, reflected);
+        scattered = Ray(rec.p, reflected + fuzz * RandomUnitInSphere());
         attenuation = albedo;
         return (dot(scattered.direction(), rec.normal) > 0);
     }
     Vector3 albedo;
+    float fuzz;
 };
 
-struct dielectric : public Material
+struct Dielectric : Material
 {
-    dielectric(float ri) : ref_idx(ri) {}
+    Dielectric(float ri) : ref_idx(ri) {}
     virtual bool scatter(const Ray &r_in, const HitRecord &rec, Vector3 &attenuation, Ray &scattered) const
     {
         Vector3 outward_normal;
